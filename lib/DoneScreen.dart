@@ -19,6 +19,7 @@ class _DonescreenState extends State<Donescreen> {
       builder: (context,state){
         var tasks=AppCubit.get(context).doneTasks;
         return tasks.isEmpty?noTasks(): ListView.separated(
+          reverse: true,
             itemBuilder: (context, index) => Dismissible(
               direction:DismissDirection.startToEnd,
               key: Key(tasks[index]['id'].toString()),
@@ -45,30 +46,37 @@ class _DonescreenState extends State<Donescreen> {
                     SizedBox(
                       width: 20,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            "${tasks[index]['title']}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "${tasks[index]['date']}",
+                            style: TextStyle(color: Colors.grey[500]),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "${tasks[index]['title']}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "${tasks[index]['date']}",
-                          style: TextStyle(color: Colors.grey[500]),
-                        ),
+                        IconButton(onPressed: (){
+                          AppCubit.get(context).updateDatabase(status: "done", id:tasks[index]["id"]);
+                        }, icon:Icon(Icons.check_circle_rounded,color: Colors.green,)),
+                        IconButton(onPressed: (){
+                          AppCubit.get(context).updateDatabase(status: "archived", id:tasks[index]["id"]);
+                        }, icon:Icon(Icons.archive_rounded,color: Colors.black87,)),
                       ],
                     ),
-                    Spacer(),
-                    IconButton(onPressed: (){
-                      AppCubit.get(context).updateDatabase(status: "done", id:tasks[index]["id"]);
-                    }, icon:Icon(Icons.check_circle_rounded,color: Colors.green,)),
-                    IconButton(onPressed: (){
-                      AppCubit.get(context).updateDatabase(status: "archived", id:tasks[index]["id"]);
-                    }, icon:Icon(Icons.archive_rounded,color: Colors.black87,)),
                   ],
                 ),
               ),

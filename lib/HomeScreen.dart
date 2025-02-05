@@ -50,7 +50,7 @@ class _HomescreenState extends State<Homescreen> {
           ),
           body: cubit.Screens[cubit.Currentindex],
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.green,
+            selectedItemColor: Colors.cyan,
             unselectedItemColor: Colors.grey,
             elevation: 10,
             currentIndex: cubit.Currentindex,

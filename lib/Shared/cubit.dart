@@ -18,15 +18,16 @@ class AppCubit extends Cubit<AppStates> {
     Archivedscreen(),
   ];
   List<String> Titles=[
-    'Home Screen',
-    'Done Screen',
-    "Archived Screen"
+    'New Tasks ',
+    'Done Tasks',
+    "Archived Tasks"
   ];
   List<Map> newTasks = [];
   List<Map> doneTasks = [];
   List<Map> archivedTasks = [];
   int Currentindex = 0;
   bool isBottomSheetShown = false;
+  bool isLoading=false;
   IconData triggerdIcon = Icons.edit;
   late Database database;
   void changeIndex(int index) {
@@ -68,6 +69,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void getDataFromDatabase(database) {
+    isLoading=true;
     newTasks.clear();
     doneTasks.clear();
     archivedTasks.clear();
@@ -82,9 +84,11 @@ class AppCubit extends Cubit<AppStates> {
           doneTasks.add(element);
         }
       }
+      isLoading=false;
       emit(GetDataFromDatabase()); // Ensure UI updates
     }).catchError((error) {
       print("Error when getting data: ${error.toString()}");
+      isLoading=false;
     });
   }
 
